@@ -63,13 +63,14 @@ class HomeViewController: UIViewController {
         let titles = ["Following", "For You"]
         let control = UISegmentedControl(items: titles)
         let titleSelected = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13, weight: .black)]
-        let titleNormal = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13, weight: .semibold)]
+        let titleNormal = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13, weight: .bold)]
             control.setTitleTextAttributes(titleNormal, for: .normal)
             control.setTitleTextAttributes(titleSelected, for: .selected)
         control.backgroundColor = .clear
         control.selectedSegmentTintColor = .clear
         control.tintColor = .clear
         control.selectedSegmentIndex = 1
+        control.addTarget(self, action: #selector(handleDidChangeSegmentControl(_:)), for: .valueChanged)
         navigationItem.titleView = control
     }
     
@@ -119,6 +120,12 @@ class HomeViewController: UIViewController {
         forYouPageViewController.view.frame = CGRect(x: view.width, y: 0, width: horizontalScrollView.width, height: horizontalScrollView.height)
         addChild(forYouPageViewController)
         forYouPageViewController.didMove(toParent: self)
+    }
+    
+    // MARK: - OBJEC Methods
+    @objc func handleDidChangeSegmentControl(_ sender: UISegmentedControl) {
+        print(sender.selectedSegmentIndex)
+        horizontalScrollView.setContentOffset(CGPoint(x: view.width * CGFloat(sender.selectedSegmentIndex), y: 0), animated: true)
     }
 
 }
