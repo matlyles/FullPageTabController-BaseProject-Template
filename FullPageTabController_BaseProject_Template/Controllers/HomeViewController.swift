@@ -22,6 +22,20 @@ class HomeViewController: UIViewController {
         return scrollView
     }()
     
+    let control: UISegmentedControl = {
+        let titles = ["Following", "For You"]
+        let control = UISegmentedControl(items: titles)
+        let titleSelected = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13, weight: .black)]
+        let titleNormal = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13, weight: .bold)]
+        control.setTitleTextAttributes(titleNormal, for: .normal)
+        control.setTitleTextAttributes(titleSelected, for: .selected)
+        control.backgroundColor = .clear
+        control.selectedSegmentTintColor = .clear
+        control.tintColor = .clear
+        control.selectedSegmentIndex = 1
+        return control
+    }()
+    
     let forYouPageViewController = UIPageViewController(
         transitionStyle: .scroll,
         navigationOrientation: .vertical,
@@ -44,6 +58,7 @@ class HomeViewController: UIViewController {
         view.backgroundColor = .systemBackground
         view.addSubview(horizontalScrollView)
         setupFeed()
+        horizontalScrollView.delegate = self
         horizontalScrollView.contentOffset = CGPoint(x: view.width, y: 0)
         setupHeaderButtons()
     }
@@ -60,16 +75,6 @@ class HomeViewController: UIViewController {
 
     // MARK: - Methods
     func setupHeaderButtons() {
-        let titles = ["Following", "For You"]
-        let control = UISegmentedControl(items: titles)
-        let titleSelected = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13, weight: .black)]
-        let titleNormal = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13, weight: .bold)]
-            control.setTitleTextAttributes(titleNormal, for: .normal)
-            control.setTitleTextAttributes(titleSelected, for: .selected)
-        control.backgroundColor = .clear
-        control.selectedSegmentTintColor = .clear
-        control.tintColor = .clear
-        control.selectedSegmentIndex = 1
         control.addTarget(self, action: #selector(handleDidChangeSegmentControl(_:)), for: .valueChanged)
         navigationItem.titleView = control
     }
@@ -178,4 +183,14 @@ extension HomeViewController: UIPageViewControllerDataSource {
         return forYouPosts
     }
     
+}
+
+extension HomeViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.x == 0 {
+            control.selectedSegmentIndex = 0
+        } else if scrollView.contentOffset.x > (view.width/2) {
+            control.selectedSegmentIndex = 1
+        }
+    }
 }
