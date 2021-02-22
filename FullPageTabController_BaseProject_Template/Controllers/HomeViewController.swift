@@ -63,10 +63,11 @@ class HomeViewController: UIViewController {
         setupHeaderButtons()
     }
     override func viewDidAppear(_ animated: Bool) {
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.isTranslucent = true
-        navigationController?.navigationBar.tintColor = .white
+        self.tabBarController?.tabBar.unselectedItemTintColor = .white
+        self.tabBarController?.tabBar.tintColor = .white
+        self.tabBarController?.tabBar.barTintColor = .black
+        self.tabBarController?.tabBar.isOpaque = false
+        self.tabBarController?.tabBar.isTranslucent = false
     }
     
     override func viewDidLayoutSubviews() {
